@@ -1,14 +1,15 @@
+# brain_agriculture/app/routes/producer.py
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from brain_agriculture.app import schemas, models, database
-from brain_agriculture import schemas
-from brain_agriculture import producer, crop, harvest, farm, harvest_crop, base
+from brain_agriculture.database import SessionLocal
+from brain_agriculture import schemas, models
 
 router = APIRouter()
 
 # Dependency
 def get_db():
-    db = database.SessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
