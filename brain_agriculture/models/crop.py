@@ -12,5 +12,5 @@ class Crop(Base):
     name = Column(String, nullable=False)
     variety = Column(String, nullable=False)
     farm_id = Column(Integer, ForeignKey("farms.id"))
-
     farm = relationship("Farm", back_populates="crops")
+    harvest_crops = relationship("HarvestCrop", back_populates="crop", cascade="all, delete")

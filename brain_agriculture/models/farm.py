@@ -17,3 +17,4 @@ class Farm(Base):
 
     producer = relationship("Producer", back_populates="farms")
     crops = relationship("Crop", back_populates="farm", cascade="all, delete")
+    harvests = relationship("Harvest", back_populates="farm")
