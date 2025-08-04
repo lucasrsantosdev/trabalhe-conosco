@@ -1,15 +1,28 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List, Optional
 
-# Schema para leitura (GET /producers)
-class Producer(BaseModel):
-    id: int
+
+class HarvestCropCreate(BaseModel):
+    crop_name: str
+    harvest_year: int
+
+
+class HarvestCreate(BaseModel):
+    year: int
+    crops: List[HarvestCropCreate]
+
+
+class FarmCreateNested(BaseModel):
     name: str
-    document: str
+    city: str
+    state: str
+    total_area: float
+    arable_area: float
+    vegetation_area: float
+    harvests: List[HarvestCreate]
 
-    class Config:
-        from_attributes = True  # Corrigido: indentação correta (equivalente ao antigo orm_mode = True)
 
-# Schema para criação/atualização (POST/PUT /producers)
-class ProducerCreate(BaseModel):
+class ProducerFullCreate(BaseModel):
+    document: str = Field(..., description="CPF ou CNPJ")
     name: str
-    document: str
+    farm: FarmCreateNested
