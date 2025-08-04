@@ -1,1 +1,1 @@
-from .producer import Producer, ProducerCreate
+from .producer import ProducerCreate, ProducerFullCreate

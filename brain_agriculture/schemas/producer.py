@@ -1,28 +1,24 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List
+from brain_agriculture.schemas.farm import FarmCreate
 
-
-class HarvestCropCreate(BaseModel):
-    crop_name: str
-    harvest_year: int
-
-
-class HarvestCreate(BaseModel):
-    year: int
-    crops: List[HarvestCropCreate]
-
-
-class FarmCreateNested(BaseModel):
+# Requisição base
+class ProducerCreate(BaseModel):
+    cpf_cnpj: str = Field(..., description="CPF ou CNPJ")
     name: str
-    city: str
-    state: str
-    total_area: float
-    arable_area: float
-    vegetation_area: float
-    harvests: List[HarvestCreate]
 
+# Requisição completa com fazendas
+class ProducerFullCreate(ProducerCreate):
+    farms: List[FarmCreate]
 
-class ProducerFullCreate(BaseModel):
-    document: str = Field(..., description="CPF ou CNPJ")
+    class Config:
+        from_attributes = True
+
+# Resposta
+class Producer(BaseModel):
+    id: int
+    cpf_cnpj: str
     name: str
-    farm: FarmCreateNested
+
+    class Config:
+        from_attributes = True

@@ -1,14 +1,22 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from brain_agriculture.models.base import Base
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from brain_agriculture import database
+from brain_agriculture.models import producer as models
+from brain_agriculture.schemas.producer import ProducerCreate, ProducerFullCreate, Producer
 
-class Producer(Base):
-    __tablename__ = "producers"
+router = APIRouter()
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    document = Column(String, unique=True, nullable=False)
+def get_db():
+    db = database.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-    # Relacionamento com a tabela de fazendas
-    farms = relationship("Farm", back_populates="producer", cascade="all, delete")
-    
+@router.post("/producers", response_model=Producer)
+def create_producer(producer: ProducerCreate, db: Session = Depends(get_db)):
+    db_producer = models.Producer(**producer.dict())
+    db.add(db_producer)
+    db.commit()
+    db.refresh(db_producer)
+    return db_producer
