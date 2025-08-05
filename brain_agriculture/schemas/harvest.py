@@ -1,8 +1,7 @@
-# brain_agriculture/schemas/harvest.py
-
 from pydantic import BaseModel
 from datetime import date
-from typing import Optional
+from typing import Optional, List
+from brain_agriculture.schemas.harvest_crop import HarvestCropCreate  # IMPORT NECESSÁRIO
 
 class HarvestBase(BaseModel):
     name: str
@@ -11,7 +10,7 @@ class HarvestBase(BaseModel):
     farm_id: int
 
 class HarvestCreate(HarvestBase):
-    pass
+    crops: List[HarvestCropCreate]  # <- LISTA DE CULTURAS PLANTADAS
 
 class Harvest(HarvestBase):
     id: int
