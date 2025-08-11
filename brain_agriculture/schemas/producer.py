@@ -52,3 +52,16 @@ class ProducerFullResponse(BaseModel):
     cpf_cnpj: str
     name: str
     farms: List[FarmInfo]
+from pydantic import BaseModel, Field, field_validator
+from brain_agriculture.validators.cpf_cnpj import validate_cpf_cnpj  # ajuste o caminho se necessário
+
+class ProducerCreate(BaseModel):
+    cpf_cnpj: str = Field(..., description="CPF ou CNPJ")
+    name: str
+
+    @field_validator("cpf_cnpj")
+    @classmethod
+    def _cpf_cnpj_ok(cls, v: str):
+        if not validate_cpf_cnpj(v):
+            raise ValueError("CPF/CNPJ inválido")
+        return v

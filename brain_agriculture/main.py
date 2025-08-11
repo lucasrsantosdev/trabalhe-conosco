@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from brain_agriculture.models.base import Base
 from brain_agriculture import database
 
+
 # Importa as rotas definidas
 from brain_agriculture.app.routes import (
     producer,
